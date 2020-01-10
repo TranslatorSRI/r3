@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: r3-web-deployment
+  namespace: translator-sri
+  labels:
+    service: r3-web
+    app: r3-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: r3-web
+  template:
+    metadata:
+      labels:
+        app: r3-web
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: r3-web
+        image: renciorg/r3
+        ports:
+          - containerPort: 6380
+            name: http
+        env:
+          - name: REDIS_HOST
+            value: "r3-redis.translator-sri"
+          - name: REDIS_PORT
+            value: "6379"
+      restartPolicy: Always
