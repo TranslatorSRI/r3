@@ -27,8 +27,6 @@ paths:
               type: string
             example:
               - request
-              - call
-              - marco
       responses:
         '200':
           description: Results
