@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: r3-web-deployment
-  namespace: translator-sri
   labels:
     service: r3-web
     app: r3-web
@@ -25,7 +24,7 @@ spec:
             name: http
         env:
           - name: REDIS_HOST
-            value: "r3-redis.translator-sri"
+            value: "r3-redis"
           - name: REDIS_PORT
             value: "6379"
       restartPolicy: Always

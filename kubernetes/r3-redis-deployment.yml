@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: r3-redis-deployment
-  namespace: translator-sri
   labels:
     service: r3-redis
     app: r3-redis
