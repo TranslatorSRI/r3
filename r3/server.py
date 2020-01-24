@@ -40,6 +40,8 @@ async def get_handler(request):
     if isinstance(request.args['key'], list):
         references = await app.redis_connection0.mget(*request.args['key'], encoding='utf-8')
         references_nonnan = [reference for reference in references if reference is not None]
+        if len(references_nonnan) == 0:
+            return response.text(f"No matches found for specified key(s).\n", status=404)
         values = await app.redis_connection1.mget(*references_nonnan, encoding='utf-8')
         values = [json.loads(value) if value is not None else None for value in values]
         dereference = dict(zip(references_nonnan, values))
