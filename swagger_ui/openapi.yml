@@ -26,9 +26,9 @@ paths:
             items:
               type: string
             example:
-              - request
-              - call
-              - marco
+              - "GO:0032157"
+              - "UMLS:C0856524"
+
       responses:
         '200':
           description: Results
@@ -37,34 +37,29 @@ paths:
               schema:
                 type: object
                 example:
-                  request: response
-                  call: response
-                  marco: polo
-  /set:
-    post:
-      tags:
-        - redis
-      summary: 'Set value(s) for key(s)'
-      description: ''
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              description: "Map of key: value pairs"
-              example:
-                request: response
-                call: response
-                marco: polo
-        required: true
-      responses:
-        '201':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  request: response
-                  call: response
-                  marco: polo
+                  GO:0032157:
+                    id:
+                      identifier: "GO:0032157"
+                      label: "prospore contractile ring"
+                    equivalent_identifiers:
+                      - identifier: "GO:0032157"
+                        label: "prospore contractile ring"
+                    type:
+                      - "cellular_component"
+                      - "named_thing"
+                      - "biological_entity"
+                      - "organismal_entity"
+                      - "anatomical_entity"
+
+                  UMLS:C0856524:
+                   id:
+                    identifier: "UMLS:C0856524"
+                  equivalent_identifiers:
+                   - identifier: "UMLS:C0856524"
+                   - identifier: "MEDDRA:10035322"
+                  type:
+                  - "phenotypic_feature"
+                  - "named_thing"
+                  - "biological_entity"
+                  - "disease_or_phenotypic_feature"
+
