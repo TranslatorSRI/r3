@@ -31,8 +31,8 @@ async def shutdown_connections(app, loop):
     await app.redis_connection1.wait_closed()
 
 
-@app.route('/get')
-async def get_handler(request):
+@app.route('/get_Normalized_Nodes')
+async def get_normalized_node_handler(request):
     """Get value(s) for key(s).
 
     Use GET for single key, MGET for multiple.
@@ -57,6 +57,21 @@ async def get_handler(request):
         value = json.loads(value) if value is not None else None
         return response.json({request.args['key']: value})
 
+@app.route('/get_Node_Types')
+async def get_normalized_node_handler(request):
+    # get the distinct list of Biolink model types
+    the_types = {'Biolink model': {'types': ['cellular_component', 'named_thing', 'biological_entity', 'organismal_entity', 'anatomical_entity']}}
+
+    # return the data to the caller
+    return response.json(the_types)
+
+@app.route('/get_Curie_Prefixes')
+async def get_curie_prefixes_handler(request):
+    # get the list of Curie prefixes for the Biolink model type passed
+    the_curie_prefixes = {'Biolink model type': {'Curies': ['CHEMBL', 'PUBCHEM', 'MONDO']}}
+
+    # return the data to the caller
+    return response.json(the_curie_prefixes)
 
 app.register_listener(startup_connections, 'after_server_start')
 app.register_listener(shutdown_connections, 'before_server_stop')

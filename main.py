@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 """Run Redis-REST with referencing."""
 import argparse
 from r3.server import app

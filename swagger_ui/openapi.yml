@@ -1,10 +1,10 @@
 openapi: 3.0.2
 info:
-  title: Redis-REST with Referencing
-  description: 'A REST interface for a Redis database, with referencing'
+  title: Redis-REST with Referencing for Node normalization
+  description: 'A REST interface for a Redis database, with referencing for Node normalization</br>'
   version: '1.0.0'
   contact:
-    email: patrick@covar.com
+    email: kebedey@renci.org
   termsOfService: http://robokop.renci.org:7055/tos?service_long=Redis-REST+with+Referencing&provider_long=the+Translator+Consortium
   license:
     name: MIT
@@ -12,15 +12,74 @@ info:
 tags:
   - name: redis
 paths:
-  /get:
+  /get_Node_Types:
     get:
       tags:
         - redis
-      summary: 'Get value(s) for key(s)'
-      description: ''
+      summary: 'Get the comprehensive list of the BioLink model node types.'
+      description: 'The data shown here is a distinct set of the Biolink model node types discovered in the compendium noted above.'
+
+      responses:
+        '200':
+          description: Results
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  Biolink model:
+                    types:
+                      - "cellular_component"
+                      - "named_thing"
+                      - "Etc."
+
+  /get_Curie_Prefixes:
+    get:
+      tags:
+        - redis
+      summary: 'Get the Curie prefix(es) for the Biolink model type(s) entered.'
+      description: 'The data shown here represents the potential Curies returned for a specific Biolink model type.'
       parameters:
         - in: query
-          name: key
+          name: Biolink model type
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - "chemical_substance"
+              - "biological_entity"
+
+      responses:
+        '200':
+          description: Results
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  chemical_substance:
+                    curie prefix:
+                      - "GO"
+                      - "PUBCHEM"
+                      - "CHEMBL"
+
+                  biological_entity:
+                    curie prefix:
+                      - "CHEBI"
+                      - "UNICHEM"
+
+  /get_Normalized_Nodes:
+    get:
+      tags:
+        - redis
+      summary: 'Get the BioLink model types and equivalent identifiers for the curie(s) entered.'
+      description: 'The data in this compendium is gathered from the following sources (and Curie).
+      </br>- PubMed (PMID)
+      </br> - Etc.'
+      parameters:
+        - in: query
+          name: Curie
           schema:
             type: array
             items:
