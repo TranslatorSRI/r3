@@ -7,7 +7,7 @@ setup(
     author='Patrick Wang',
     author_email='patrick@covar.com',
     url='https://github.com/patrickkwang/r3',
-    description='Redis-REST with referenceing',
+    description='Redis-REST with referencing',
     packages=['r3'],
     include_package_data=True,
     zip_safe=False,
