@@ -85,18 +85,20 @@ async def get_curie_prefixes_handler(request):
     if isinstance(request.args['semantictype'], list):
         for item in request.args['semantictype']:
             # get the curies for this type
-            curies = await app.redis_connection2.lrange(item, 0 ,-1, encoding='utf-8')
+            curies = await app.redis_connection2.get(item, encoding='utf-8')
 
             # did we get any data
             if not curies:
                 return response.text(f'No curies discovered for {item}.', status=404)
+
+            curies = json.loads(curies)
 
             # set the return data
             ret_val[item] = {'curie_prefix': [curies]}
     # else it must be a singleton
     else:
         # get the curies for this type
-        curies = await app.redis_connection2.lrange(request.args["semantictype"], 0 ,-1, encoding='utf-8')
+        curies = await app.redis_connection2.get(request.args["semantictype"], encoding='utf-8')
 
         # did we get any data
         if not curies:

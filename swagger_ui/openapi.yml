@@ -41,8 +41,8 @@ paths:
     get:
       tags:
         - Interfaces
-      summary: 'Get the curie prefix(es) for the semantic type(s) entered.'
-      description: 'Returns the curies for a semantic type(s).'
+      summary: 'Get the curie prefix(es) and hit count for the semantic type(s) entered.'
+      description: 'Returns the curies and their hit count for a semantic type(s).'
       parameters:
         - in: query
           name: semantictype
@@ -52,7 +52,7 @@ paths:
               type: string
             example:
               - "chemical_substance"
-              - "biological_entity"
+              - "anatomical_entity"
 
       responses:
         '200':
@@ -64,15 +64,15 @@ paths:
                 example:
                   chemical_substance:
                     curie_prefix:
-                      - "GO"
-                      - "PUBCHEM"
-                      - "etc."
+                      "GO": 1234,
+                      "PUBCHEM": 4567,
+                      "etc.": a hit count
 
-                  biological_entity:
+                  anatomical_entity:
                     curie_prefix:
-                      - "CHEBI"
-                      - "UNICHEM"
-                      - "etc."
+                      "CHEBI": 1234,
+                      "UNICHEM": 4567,
+                      "etc.": the hit count
 
   /get_normalized_nodes:
     get:
