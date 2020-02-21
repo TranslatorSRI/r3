@@ -1,7 +1,11 @@
 openapi: 3.0.2
 info:
   title: Redis-REST with Referencing for Node normalization
-  description: 'A REST interface for a Redis database, with referencing for Node normalization</br>'
+  description: 'A REST interface for a Redis database with referencing for Node normalization.</br></br>
+  The data in this compendium is gathered from the following sources:
+  </br> - PubMed (PMID)
+  </br> - Etc.'
+
   version: '1.0.0'
   contact:
     email: kebedey@renci.org
@@ -10,14 +14,14 @@ info:
     name: MIT
     url: 'https://opensource.org/licenses/MIT'
 tags:
-  - name: redis
+  - name: Interfaces
 paths:
-  /get_Node_Types:
+  /get_semantic_types:
     get:
       tags:
-        - redis
-      summary: 'Get the comprehensive list of the BioLink model node types.'
-      description: 'The data shown here is a distinct set of the Biolink model node types discovered in the compendium noted above.'
+        - Interfaces
+      summary: 'Get the comprehensive list of semantic types.'
+      description: 'Returns a distinct set of the semantic types discovered in the compendium data.'
 
       responses:
         '200':
@@ -27,21 +31,21 @@ paths:
               schema:
                 type: object
                 example:
-                  Biolink model:
+                  semantic_types:
                     types:
                       - "cellular_component"
                       - "named_thing"
-                      - "Etc."
+                      - "etc."
 
-  /get_Curie_Prefixes:
+  /get_curie_prefixes:
     get:
       tags:
-        - redis
-      summary: 'Get the Curie prefix(es) for the Biolink model type(s) entered.'
-      description: 'The data shown here represents the potential Curies returned for a specific Biolink model type.'
+        - Interfaces
+      summary: 'Get the curie prefix(es) for the semantic type(s) entered.'
+      description: 'Returns the curies for a semantic type(s).'
       parameters:
         - in: query
-          name: Biolink model type
+          name: semantictype
           schema:
             type: array
             items:
@@ -59,27 +63,26 @@ paths:
                 type: object
                 example:
                   chemical_substance:
-                    curie prefix:
+                    curie_prefix:
                       - "GO"
                       - "PUBCHEM"
-                      - "CHEMBL"
+                      - "etc."
 
                   biological_entity:
-                    curie prefix:
+                    curie_prefix:
                       - "CHEBI"
                       - "UNICHEM"
+                      - "etc."
 
-  /get_Normalized_Nodes:
+  /get_normalized_nodes:
     get:
       tags:
-        - redis
-      summary: 'Get the BioLink model types and equivalent identifiers for the curie(s) entered.'
-      description: 'The data in this compendium is gathered from the following sources (and Curie).
-      </br>- PubMed (PMID)
-      </br> - Etc.'
+        - Interfaces
+      summary: 'Get the equivalent identifiers and semantic types for the curie(s) entered.'
+      description: 'Returns the equivalent identifiers and semantic types for the curie(s) entered.'
       parameters:
         - in: query
-          name: Curie
+          name: curie
           schema:
             type: array
             items:
@@ -106,9 +109,7 @@ paths:
                     type:
                       - "cellular_component"
                       - "named_thing"
-                      - "biological_entity"
-                      - "organismal_entity"
-                      - "anatomical_entity"
+                      - "etc."
 
                   UMLS:C0856524:
                    id:
@@ -119,6 +120,4 @@ paths:
                   type:
                   - "phenotypic_feature"
                   - "named_thing"
-                  - "biological_entity"
-                  - "disease_or_phenotypic_feature"
-
+                  - "etc."

@@ -21,6 +21,8 @@ async def startup_connections(app, loop):
         f'redis://{redis_host}:{redis_port}', db=0)
     app.redis_connection1 = await aioredis.create_redis_pool(
         f'redis://{redis_host}:{redis_port}', db=1)
+    app.redis_connection2 = await aioredis.create_redis_pool(
+        f'redis://{redis_host}:{redis_port}', db=2)
 
 
 async def shutdown_connections(app, loop):
@@ -28,50 +30,83 @@ async def shutdown_connections(app, loop):
     app.redis_connection0.close()
     await app.redis_connection0.wait_closed()
     app.redis_connection1.close()
-    await app.redis_connection1.wait_closed()
+    await app.redis_connection2.wait_closed()
+    app.redis_connection2.close()
+    await app.redis_connection2.wait_closed()
 
 
-@app.route('/get_Normalized_Nodes')
+@app.route('/get_normalized_nodes')
 async def get_normalized_node_handler(request):
     """Get value(s) for key(s).
 
     Use GET for single key, MGET for multiple.
     """
-    if isinstance(request.args['key'], list):
-        references = await app.redis_connection0.mget(*request.args['key'], encoding='utf-8')
+    if isinstance(request.args['curie'], list):
+        references = await app.redis_connection0.mget(*request.args['curie'], encoding='utf-8')
         references_nonnan = [reference for reference in references if reference is not None]
         if not references_nonnan:
-            return response.text('No matches found for specified key(s).', status=404)
+            return response.text('No matches found for the specified curie(s).', status=404)
         values = await app.redis_connection1.mget(*references_nonnan, encoding='utf-8')
         values = [json.loads(value) if value is not None else None for value in values]
         dereference = dict(zip(references_nonnan, values))
         return response.json({
             key: dereference[reference] if reference is not None else None
-            for key, reference in zip(request.args['key'], references)
+            for key, reference in zip(request.args['curie'], references)
         })
     else:
-        reference = await app.redis_connection0.get(request.args['key'], encoding='utf-8')
+        reference = await app.redis_connection0.get(request.args['curie'], encoding='utf-8')
         if reference is None:
-            return response.json({request.args['key']: None})
+            return response.json({request.args['curie']: None})
         value = await app.redis_connection1.get(reference, encoding='utf-8')
         value = json.loads(value) if value is not None else None
-        return response.json({request.args['key']: value})
+        return response.json({request.args['curie']: value})
 
-@app.route('/get_Node_Types')
-async def get_normalized_node_handler(request):
-    # get the distinct list of Biolink model types
-    the_types = {'Biolink model': {'types': ['cellular_component', 'named_thing', 'biological_entity', 'organismal_entity', 'anatomical_entity']}}
+@app.route('/get_semantic_types')
+async def get_semantic_types_handler(request):
+    # look for all biolink semantic types
+    types = await app.redis_connection2.lrange('semantic_types', 0 ,-1, encoding='utf-8')
+
+    # did we get any data
+    if not types:
+        return response.text('No semantic types discovered.', status=404)
+
+    # get the distinct list of Biolink model types in the correct format
+    ret_val = {'semantic_types': {'types': types}}
 
     # return the data to the caller
-    return response.json(the_types)
+    return response.json(ret_val)
 
-@app.route('/get_Curie_Prefixes')
+@app.route('/get_curie_prefixes')
 async def get_curie_prefixes_handler(request):
-    # get the list of Curie prefixes for the Biolink model type passed
-    the_curie_prefixes = {'Biolink model type': {'Curies': ['CHEMBL', 'PUBCHEM', 'MONDO']}}
+    # storage for the returned data
+    ret_val: dict = {}
+
+    # is the input a list
+    if isinstance(request.args['semantictype'], list):
+        for item in request.args['semantictype']:
+            # get the curies for this type
+            curies = await app.redis_connection2.lrange(item, 0 ,-1, encoding='utf-8')
+
+            # did we get any data
+            if not curies:
+                return response.text(f'No curies discovered for {item}.', status=404)
+
+            # set the return data
+            ret_val[item] = {'curie_prefix': [curies]}
+    # else it must be a singleton
+    else:
+        # get the curies for this type
+        curies = await app.redis_connection2.lrange(request.args["semantictype"], 0 ,-1, encoding='utf-8')
+
+        # did we get any data
+        if not curies:
+            return response.text(f'No curie discovered for {request.args["semantictype"]}.', status=404)
+
+        # set the return data
+        ret_val[request.args['semantictype']] = {'curie_prefix': [curies]}
 
     # return the data to the caller
-    return response.json(the_curie_prefixes)
+    return response.json(ret_val)
 
 app.register_listener(startup_connections, 'after_server_start')
 app.register_listener(shutdown_connections, 'before_server_stop')
