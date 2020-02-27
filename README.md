@@ -1,4 +1,4 @@
-# Node Normlaization
+# Node Normalization
 
 Node normalization takes a CURIE, and returns:
 * The preferred CURIE for this entity
