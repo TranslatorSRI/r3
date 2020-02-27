@@ -31,7 +31,7 @@ async def shutdown_connections(app, loop):
     await app.redis_connection1.wait_closed()
 
 
-@app.route('/get')
+@app.route('/get_similar')
 async def get_handler(request):
     """Get value(s) for key(s).
 

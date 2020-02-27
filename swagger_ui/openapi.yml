@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: Redis-REST with Referencing for Chemical Normalization
-  description: 'Redis-REST with Referencing for Chemical Normalization'
+  description: 'Given a chemical substance, return similar chemical substances.</br>This site utilizes RDKit to determine similar substances based on thier SMILES values.'
   version: '1.0.0'
   contact:
     email: powen@renci.org
@@ -12,11 +12,11 @@ info:
 tags:
   - name: Interfaces(s)
 paths:
-  /get:
+  /get_similar:
     get:
       tags:
-        - redis
-      summary: 'Get value(s) for key(s)'
+        - Interfaces(s)
+      summary: 'Get similar chemical substances for the chemical substance requested.'
       description: ''
       parameters:
         - in: query
