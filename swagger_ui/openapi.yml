@@ -1,16 +1,16 @@
 openapi: 3.0.2
 info:
-  title: Redis-REST with Referencing
-  description: 'A REST interface for a Redis database, with referencing'
+  title: Redis-REST with Referencing for Chemical Normalization
+  description: 'Redis-REST with Referencing for Chemical Normalization'
   version: '1.0.0'
   contact:
-    email: patrick@covar.com
+    email: powen@renci.org
   termsOfService: http://robokop.renci.org:7055/tos?service_long=Redis-REST+with+Referencing&provider_long=the+Translator+Consortium
   license:
     name: MIT
     url: 'https://opensource.org/licenses/MIT'
 tags:
-  - name: redis
+  - name: Interfaces(s)
 paths:
   /get:
     get:
