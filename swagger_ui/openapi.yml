@@ -1,7 +1,8 @@
 openapi: 3.0.2
 info:
-  title: Redis-REST with Referencing for Chemical Normalization
-  description: 'Given a chemical substance, return similar chemical substances.</br>This site utilizes RDKit to determine similar substances based on thier SMILES values.'
+  title: Chemical Normalization
+  description: 'Chemical normalization takes a chemical substance (CURIE) and returns a list of similar chemicals.
+    </br><br>Each chemical substance is defined by a SMILES value. In this application we simplify each chemical substance''s SMILES using RDKit and then group these chemicals by their SMILES values.'
   version: '1.0.0'
   contact:
     email: powen@renci.org
@@ -12,21 +13,22 @@ info:
 tags:
   - name: Interfaces(s)
 paths:
-  /get_similar:
+  /get_similar_chemicals:
     get:
       tags:
         - Interfaces(s)
-      summary: 'Get similar chemical substances for the chemical substance requested.'
+      summary: 'Returns similar chemical substances using a chemical substance''s CURIE(s).'
       description: ''
       parameters:
         - in: query
-          name: key
+          name: curie
           schema:
             type: array
             items:
               type: string
             example:
               -  CHEBI:77287
+
       responses:
         '200':
           description: Results
@@ -35,4 +37,32 @@ paths:
               schema:
                 type: object
                 example:
-                  request: response
+                  CHEBI:77287:
+                    members:
+                    - id: CHEBI:17832
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:140773
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:132555
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:136125
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:137148
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:137889
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:141508
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:137854
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:73841
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:85764
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:85765
+                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:77287
+                      ORIGINAL_SMILES: "*/C=C\\OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEBI:78195
+                      ORIGINAL_SMILES: "*C=COCC(O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    simplified_smiles: "*C=COCC(O)COP(=O)([O-])OCC[N+](C)(C)C"

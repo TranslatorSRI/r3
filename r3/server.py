@@ -31,31 +31,31 @@ async def shutdown_connections(app, loop):
     await app.redis_connection1.wait_closed()
 
 
-@app.route('/get_similar')
+@app.route('/get_similar_chemicals')
 async def get_handler(request):
     """Get value(s) for key(s).
 
     Use GET for single key, MGET for multiple.
     """
-    if isinstance(request.args['key'], list):
-        references = await app.redis_connection0.mget(*request.args['key'], encoding='utf-8')
+    if isinstance(request.args['curie'], list):
+        references = await app.redis_connection0.mget(*request.args['curie'], encoding='utf-8')
         references_nonnan = [reference for reference in references if reference is not None]
         if not references_nonnan:
-            return response.text('No matches found for specified key(s).', status=404)
+            return response.text('No matches found for specified CURIE(s).', status=404)
         values = await app.redis_connection1.mget(*references_nonnan, encoding='utf-8')
         values = [json.loads(value) if value is not None else None for value in values]
         dereference = dict(zip(references_nonnan, values))
         return response.json({
             key: dereference[reference] if reference is not None else None
-            for key, reference in zip(request.args['key'], references)
+            for key, reference in zip(request.args['curie'], references)
         })
     else:
-        reference = await app.redis_connection0.get(request.args['key'], encoding='utf-8')
+        reference = await app.redis_connection0.get(request.args['curie'], encoding='utf-8')
         if reference is None:
-            return response.json({request.args['key']: None})
+            return response.json({request.args['curie']: None})
         value = await app.redis_connection1.get(reference, encoding='utf-8')
         value = json.loads(value) if value is not None else None
-        return response.json({request.args['key']: value})
+        return response.json({request.args['curie']: value})
 
 
 app.register_listener(startup_connections, 'after_server_start')
