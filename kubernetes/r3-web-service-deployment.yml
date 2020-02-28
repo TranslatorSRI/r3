@@ -18,7 +18,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: r3-web
-        image: renciorg/r3
+        image: renciorg/r3_chemnorm
         ports:
           - containerPort: 6380
             name: http
