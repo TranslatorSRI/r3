@@ -27,7 +27,7 @@ paths:
             items:
               type: string
             example:
-              -  CHEBI:77287
+              -  CHEMBL.COMPOUND:CHEMBL426184
 
       responses:
         '200':
@@ -37,32 +37,10 @@ paths:
               schema:
                 type: object
                 example:
-                  CHEBI:77287:
+                  CHEMBL.COMPOUND:CHEMBL426184:
                     members:
-                    - id: CHEBI:17832
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:140773
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:132555
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:136125
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:137148
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:137889
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:141508
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:137854
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:73841
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:85764
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:85765
-                      ORIGINAL_SMILES: "*/C=C/OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:77287
-                      ORIGINAL_SMILES: "*/C=C\\OC[C@@H](O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    - id: CHEBI:78195
-                      ORIGINAL_SMILES: "*C=COCC(O)COP(=O)([O-])OCC[N+](C)(C)C"
-                    simplified_smiles: "*C=COCC(O)COP(=O)([O-])OCC[N+](C)(C)C"
+                    - id: CHEMBL.COMPOUND:CHEMBL426184
+                      ORIGINAL_SMILES: CCOC(=O)C1=CCCCC1S(=O)(=O)Nc1ccc(F)cc1Cl
+                    - id: CHEMBL.COMPOUND:CHEMBL225157
+                      ORIGINAL_SMILES: CCOC(=O)C1=CCCC[C@H]1S(=O)(=O)Nc1ccc(F)cc1Cl
+                    simplified_smiles: CCOC(=O)C1=CCCCC1S(=O)(=O)Nc1ccc(F)cc1Cl
