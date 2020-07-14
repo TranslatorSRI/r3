@@ -81,31 +81,48 @@ async def get_curie_prefixes_handler(request):
     # storage for the returned data
     ret_val: dict = {}
 
-    # is the input a list
-    if isinstance(request.args['semantic_type'], list):
-        for item in request.args['semantic_type']:
+    # was an arg passed in
+    if len(request.args) != 0:
+        # is the input a list
+        if isinstance(request.args['semantic_type'], list):
+            for item in request.args['semantic_type']:
+                # get the curies for this type
+                curies = await app.redis_connection2.get(item, encoding='utf-8')
+
+                # did we get any data
+                if not curies:
+                    curies = '{' + f'"{item}"' + ': "Not Found"}'
+
+                curies = json.loads(curies)
+
+                # set the return data
+                ret_val[item] = {'curie_prefix': [curies]}
+        # else it must be a singleton+6+9++
+        else:
+            # get the curies for this type
+            curies = await app.redis_connection2.get(request.args["semantic_type"], encoding='utf-8')
+
+            # did we get any data
+            if not curies:
+                return response.text(f'No curie discovered for {request.args["semantic_type"]}.', status=404)
+
+            # set the return data
+            ret_val[request.args['semantic_type']] = {'curie_prefix': [curies]}
+    else:
+        types = await app.redis_connection2.lrange('semantic_types', 0, -1, encoding='utf-8')
+
+        for item in types:
             # get the curies for this type
             curies = await app.redis_connection2.get(item, encoding='utf-8')
 
             # did we get any data
             if not curies:
-                return response.text(f'No curies discovered for {item}.', status=404)
+                curies = '{' + f'"{item}"' + ': "Not Found"}'
 
             curies = json.loads(curies)
 
             # set the return data
             ret_val[item] = {'curie_prefix': [curies]}
-    # else it must be a singleton
-    else:
-        # get the curies for this type
-        curies = await app.redis_connection2.get(request.args["semantic_type"], encoding='utf-8')
-
-        # did we get any data
-        if not curies:
-            return response.text(f'No curie discovered for {request.args["semantic_type"]}.', status=404)
-
-        # set the return data
-        ret_val[request.args['semantic_type']] = {'curie_prefix': [curies]}
 
     # return the data to the caller
     return response.json(ret_val)
