@@ -53,7 +53,7 @@ paths:
       description: 'Returns the curies and their hit count for a semantic type(s).'
       parameters:
         - in: query
-          name: semantictype
+          name: semantic_type
           schema:
             type: array
             items:

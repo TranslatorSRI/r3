@@ -82,8 +82,8 @@ async def get_curie_prefixes_handler(request):
     ret_val: dict = {}
 
     # is the input a list
-    if isinstance(request.args['semantictype'], list):
-        for item in request.args['semantictype']:
+    if isinstance(request.args['semantic_type'], list):
+        for item in request.args['semantic_type']:
             # get the curies for this type
             curies = await app.redis_connection2.get(item, encoding='utf-8')
 
@@ -98,14 +98,14 @@ async def get_curie_prefixes_handler(request):
     # else it must be a singleton
     else:
         # get the curies for this type
-        curies = await app.redis_connection2.get(request.args["semantictype"], encoding='utf-8')
+        curies = await app.redis_connection2.get(request.args["semantic_type"], encoding='utf-8')
 
         # did we get any data
         if not curies:
-            return response.text(f'No curie discovered for {request.args["semantictype"]}.', status=404)
+            return response.text(f'No curie discovered for {request.args["semantic_type"]}.', status=404)
 
         # set the return data
-        ret_val[request.args['semantictype']] = {'curie_prefix': [curies]}
+        ret_val[request.args['semantic_type']] = {'curie_prefix': [curies]}
 
     # return the data to the caller
     return response.json(ret_val)
