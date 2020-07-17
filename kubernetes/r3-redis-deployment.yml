@@ -22,4 +22,21 @@ spec:
         ports:
           - containerPort: 6379
             name: redis-port
+        resources:
+          requests:
+            memory: "40Gi"
+        volumeMounts:
+          - mountPath: /data
+            name: node-normalization-redis-data-mount
+          - mountPath: /etc/sysctl.conf
+            name: sysctlconfig
+            subPath: vmovercommit
       restartPolicy: Always
+      volumes:
+        - name: node-normalization-redis-data-mount
+          persistentVolumeClaim:
+            claimName: node-normalization-pvc
+        - name: sysctlconfig
+          configMap:
+            name: sysctl-configmap
+            defaultMode: 0555
