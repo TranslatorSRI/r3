@@ -24,7 +24,7 @@ spec:
             name: redis-port
         resources:
           requests:
-            memory: "40Gi"
+            memory: "62Gi"
         volumeMounts:
           - mountPath: /data
             name: node-normalization-redis-data-mount
